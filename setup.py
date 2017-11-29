@@ -7,7 +7,7 @@ by cmake.
 """
 
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 long_description = '''
@@ -36,29 +36,49 @@ def bin_targets():
 
 def data_files(binary):
     """Return a list of exemple configuration files bundled with `binary`"""
-    data_dir = os.path.join(
-        '/home/travis/build/bootphon/wordseg', 'data', binary)
-    return [os.path.join(data_dir, f) for f in os.listdir(data_dir)]
+    if on_readthedocs():
+        return []
+    else:
+        data_dir = os.path.join(
+            '/home/travis/build/bootphon/wordseg', 'data', binary)
+        return [os.path.join(data_dir, f) for f in os.listdir(data_dir)]
 
+def requires():
+    """The python dependancies required to install wordseg"""
+    if on_readthedocs():
+        return [
+            'six',
+            'joblib',
+            'numpydoc',
+            'sphinx']
+    else:
+        return [
+            'six',
+            'joblib',
+            'numpy',
+            'pandas',
+            'numpydoc',
+            'pytest',
+            'sphinx',
+            'sphinx_rtd_theme']
+
+package_prefix = '' if on_readthedocs() else '/home/travis/build/bootphon/wordseg/'
 
 setup(
     name='wordseg',
     version='0.5.1',
+    author='Alex Cristia, Mathieu Bernard, Elin Larsen',
     description='tools for text based word segmentation',
     long_description=long_description,
-    author='Alex Cristia, Mathieu Bernard, Elin Larsen',
     url='https://github.com/bootphon/wordseg',
     license='GPL3',
     zip_safe=True,
 
-    package_dir={
-        'wordseg': '/home/travis/build/bootphon/wordseg/wordseg',
-        'wordseg.algos': '/home/travis/build/bootphon/wordseg/wordseg/algos'},
+    install_requires=requires(),
     packages=['wordseg', 'wordseg.algos'],
-
-    install_requires=(['six', 'joblib', 'numpydoc'] if on_readthedocs() else
-                      ['six', 'joblib', 'numpy', 'pandas', 'numpydoc']),
-    tests_require=['pytest'],
+    package_dir={
+        'wordseg': package_prefix + 'wordseg',
+        'wordseg.algos': package_prefix + 'wordseg/algos'},
 
     entry_points={'console_scripts': [
         'wordseg-prep = wordseg.prepare:main',
