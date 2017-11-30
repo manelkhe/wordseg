@@ -299,8 +299,11 @@ def main():
         train_text = test_text[:ntrain]
 
     segmented = segment(
-        test_text, prob_word_boundary=args.prob_word_boundary,
-        train_text=train_text, diphones=args.diphones, log=log)
+        test_text,
+        prob_word_boundary=args.prob_word_boundary,
+        train_text=train_text,
+        diphones=args.diphones,
+        log=log)
 
     streamout.write('\n'.join(segmented) + '\n')
 
