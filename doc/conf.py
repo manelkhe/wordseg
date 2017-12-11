@@ -59,7 +59,7 @@ author = 'Alex Cristia, Mathieu Bernard, Elin Larsen'
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 
-_VERSION = '0.5.1'
+_VERSION = '0.6'
 
 # The short X.Y version.
 version = '.'.join(_VERSION.split('.')[:2])
