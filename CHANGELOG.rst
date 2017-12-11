@@ -18,6 +18,9 @@ on master branch (not yet released)
       vowels files for syllabifications are given in the directory
       `data/syllabification`.
 
+    * Support for punctuation in input of **wordseg-prep** with the
+      ``--punctuation`` option (#10).
+
     * For citation purposes a DOI is now automatically attached to
       each wordseg release.
 
@@ -27,6 +30,8 @@ on master branch (not yet released)
 
     * **wordseg-dibs** has been debugged (#16).
 
+    * **wordseg-ag** has been debugged.
+
     * The following characters are now forbidden in separators, they
       interfer with regular expression matching::
 
@@ -34,13 +39,6 @@ on master branch (not yet released)
 
     * Type scoring is now correctly implemented in **wordseg-eval**
       (#10, #14).
-
-
-wordseg-0.5.1
--------------
-
-* Support for punctuation in input of **wordseg-prep** with the
-  ``--punctuation`` option (#10).
 
 
 wordseg-0.5
