@@ -18,7 +18,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import sys
-sys.path.insert(0, '/Users/travis/build/bootphon/wordseg')
+sys.path.insert(0, '/home/travis/build/bootphon/wordseg')
 
 html_theme = "sphinx_rtd_theme"
 #html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
