@@ -28,14 +28,8 @@ def _flatten(l):
 
 
 def _cumsum(l):
-    """Return the cumulative sum of the elements in `l`"""
-    cumsum = 0
-    out = []
-    for e in l:
-        cumsum += e
-        out.append(cumsum)
-    return out
-
+    """Return the cumulative sum from a list `l`"""
+    return [sum(l[:i+1]) for i in range(len(l))]
 
 def _fold_boundaries(text, nfolds):
     """Returns `nfolds` boundaries as a list of line indices in `text`

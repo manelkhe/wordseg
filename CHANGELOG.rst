@@ -1,9 +1,7 @@
 wordseg-0.6.1 (not yet released)
 -------------
 
-* Documentation improved.
-
-* Removed dependencies to numpy and pandas.
+* Documentation improved
 
 * Simplified output in `wordseg-stats`, removed redundancy, renamed
   'uniques' to 'hapaxes'. See #18.
@@ -11,11 +9,12 @@ wordseg-0.6.1 (not yet released)
 * Bugfix in **wordseg-tp -t relative** when the last utterance of a
   text is made of a single phone. See #25.
 
-* Bugfix when compiling adaptor grammar on MacOS with AppleClang:
-  removed pstream.h, replaced std::tr1::unordered_{map,set} by
-  std::unordered_{map,set}, removed useless code (custom
-  allocator). See #15.
+* Bugfix when compiling adaptor grammar on MacOS (removed pstream.h
+  from AG). See #15.
 
+* Improvements in adaptor grammar: replaced
+  std::tr1::unordered_{map,set} by std::unordered_{map,set}, removed
+  useless code (custom allocator).
 
 wordseg-0.6
 -----------

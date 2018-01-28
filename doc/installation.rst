@@ -36,7 +36,7 @@ work:
   - **cmake** for configuration and build (see `here <https://cmake.org/>`_),
   - the **boost program options** C++ library for option parsing (see `here
     <http://www.boost.org/doc/libs/1_65_1/doc/html/program_options.html>`_),
-  - the **joblib** Python package for parallel (multicore) processing.
+  - the **joblib** package for parallel processing.
 
 
 Install the required dependencies:

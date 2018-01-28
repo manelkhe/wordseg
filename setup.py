@@ -30,7 +30,7 @@ def bin_targets():
         return []
     else:
         return [os.path.join(
-            '/Users/travis/build/bootphon/wordseg/build', 'wordseg', 'algos', algo, algo)
+            '/home/travis/build/bootphon/wordseg/build', 'wordseg', 'algos', algo, algo)
                 for algo in ('ag', 'dpseg')]
 
 
@@ -40,7 +40,7 @@ def data_files(binary):
         return []
     else:
         data_dir = os.path.join(
-            '/Users/travis/build/bootphon/wordseg', 'data', binary)
+            '/home/travis/build/bootphon/wordseg', 'data', binary)
         return [os.path.join(data_dir, f) for f in os.listdir(data_dir)]
 
 def requires():
@@ -60,7 +60,7 @@ def requires():
             'sphinx',
             'sphinx_rtd_theme']
 
-package_prefix = '' if on_readthedocs() else '/Users/travis/build/bootphon/wordseg/'
+package_prefix = '' if on_readthedocs() else '/home/travis/build/bootphon/wordseg/'
 
 setup(
     name='wordseg',
