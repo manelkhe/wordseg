@@ -70,7 +70,7 @@ PACKAGE_PREFIX = '' if on_readthedocs() else '/home/travis/build/bootphon/wordse
 
 setup(
     name='wordseg',
-    version='0.7',
+    version='0.7.1',
     author='Alex Cristia, Mathieu Bernard, Elin Larsen',
     description='tools for text based word segmentation',
     long_description=LONG_DESCRIPTION,
