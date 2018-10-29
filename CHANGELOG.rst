@@ -2,6 +2,15 @@
    Version numbers follow the `semantic versioning
    <https://semver.org/>`_ principles.
 
+not yet released
+----------------
+
+* in **wordseg-ag**, imporved error message: when tprob == 0 on double
+  precision, indicates to try recompile with quadruple precision
+  instead.
+
+* in cluster tools: improved duration and error reporting.
+
 
 wordseg-0.7.1
 -------------
