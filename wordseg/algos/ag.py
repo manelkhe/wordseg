@@ -34,9 +34,9 @@ import threading
 from wordseg import utils
 
 
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #  Adaptor Grammar arguments
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 
 AG_ARGUMENTS = [
@@ -215,9 +215,9 @@ def _setup_seed(args, nruns):
     return new
 
 
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #  Grammar files and format
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 
 def get_grammar_files():
@@ -288,11 +288,13 @@ def check_grammar(grammar_file, category):
     """
     # make sure the grammar file exists
     if not os.path.isfile(grammar_file):
-        raise RuntimeError('grammar file not found: {}'.format(grammar_file))
+        raise RuntimeError(
+            'grammar file not found: {}'.format(grammar_file))
 
     # make sure the file is readable
     if not os.access(grammar_file, os.R_OK):
-        raise RuntimeError('grammar file not readable: {}'.format(grammar_file))
+        raise RuntimeError(
+            'grammar file not readable: {}'.format(grammar_file))
 
     # make sure the segment category is valid
     if not is_parent_in_grammar(grammar_file, category):
@@ -303,9 +305,9 @@ def check_grammar(grammar_file, category):
     return True
 
 
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #  Wrapper on AG C++ program
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 
 def _segment_single(parse_counter, train_text, grammar_file,
@@ -468,7 +470,7 @@ def _segment_single(parse_counter, train_text, grammar_file,
         shutil.rmtree(temdir)
 
 
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #  Postprocessing
 #
 # The parse trees outputed by AG need further postprocessing to
@@ -476,7 +478,7 @@ def _segment_single(parse_counter, train_text, grammar_file,
 # Treebank format). The following functions extract words from trees
 # and count the most frequent segmentation for each utterance.
 #
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 
 class ParseCounter(object):
@@ -505,8 +507,8 @@ class ParseCounter(object):
 def yield_parses(lines, ignore_firsts=0):
     """Yields parse trees, ignoring the first ones
 
-    In the raw output of AG the parse , this function yields the successive tress, ignoring the
-    first ones.
+    In the raw output of AG the parse , this function yields the
+    successive tress, ignoring the first ones.
 
     Parameters
     ----------
@@ -565,13 +567,14 @@ def postprocess(parse_counter, output_file, ignore_first_parses, log):
             nwarnings, parse_counter.nparses)
 
 
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #  Segment function
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 
 def segment(train_text, grammar_file=None, category='Colloc0',
-            args=DEFAULT_ARGS, test_text=None, ignore_first_parses=0,
+            args=DEFAULT_ARGS, test_text=None,
+            save_grammar_to=None, ignore_first_parses=0,
             nruns=8, njobs=1, tempdir=tempfile.gettempdir(),
             log=utils.null_logger()):
     """Segment a text using the Adaptor Grammar algorithm
@@ -599,6 +602,11 @@ def segment(train_text, grammar_file=None, category='Colloc0',
     test_text : sequence, optional
         If not None, the list of utterances to segment using the model
         learned from `text`
+    save_grammar_to : str, optional
+        If defined, this is an output file where to save the grammar
+        ussed for segmentation. This is usefull to keep trace of the
+        used grammar when using an auto-generated one (i.e. when
+        grammar_file is None).
     ignore_first_parses : int, optional
         Ignore the first parses from the algorithm output. If
         negative, keep only the last ones (e.g. -1 keeps only the last
@@ -630,7 +638,7 @@ def segment(train_text, grammar_file=None, category='Colloc0',
     # force the train text from sequence to list
     if not isinstance(train_text, list):
         train_text = list(train_text)
-    nutts =  len(train_text)
+    nutts = len(train_text)
     log.info('train data: %s utterances loaded', nutts)
 
     # if any, force the test text from sequence to list
@@ -688,6 +696,10 @@ def segment(train_text, grammar_file=None, category='Colloc0',
         check_grammar(grammar_file, category)
         log.info('valid grammar for level %s: %s', category, grammar_file)
 
+        if save_grammar_to:
+            log.info('saving grammar to %s', save_grammar_to)
+            shutil.copyfile(grammar_file, save_grammar_to)
+
         # parallel runs of the AG algorithm
         log.info('running AG (%d times)...', nruns)
         parse_counter = ParseCounter(nutts)
@@ -717,9 +729,9 @@ def segment(train_text, grammar_file=None, category='Colloc0',
         return parse_counter.most_common()
 
 
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #  Command line arguments
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 
 def _add_arguments(parser):
@@ -746,6 +758,11 @@ def _add_arguments(parser):
         help=('discard the n first parses of each run, default is '
               '%(default)s. If negative, keeps only the <int> last parses.'))
 
+    parser.add_argument(
+        '--tempdir', metavar='<directory>', default=tempfile.gettempdir(),
+        help=('directory where to store temporary data, '
+              'default is %(default)s.'))
+
     group = parser.add_argument_group('grammar arguments')
     group.add_argument(
         '--grammar', metavar='<grammar-file>', default=None,
@@ -760,8 +777,9 @@ def _add_arguments(parser):
               'left column of the grammar file). Default is %(default)s.'))
 
     group.add_argument(
-        '--tempdir', metavar='<directory>', default=tempfile.gettempdir(),
-        help='directory where to store temporary data, default is %(default)s.')
+        '--save-grammar-to', metavar='<grammar-file>', default=None,
+        help=('write the grammar to this <grammar-file>, usefull '
+              'to save autogenerated grammar when --grammar is unspecified.'))
 
     group = parser.add_argument_group('algorithm options')
     for arg in AG_ARGUMENTS:
@@ -850,6 +868,7 @@ def main():
         args.category,
         args=cmd_args,
         test_text=test_text,
+        save_grammar_to=args.save_grammar_to,
         ignore_first_parses=args.ignore_first_parses,
         nruns=args.nruns,
         njobs=args.njobs,
