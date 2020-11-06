@@ -59,7 +59,6 @@ def _threshold_absolute(units, tps):
 # -----------------------------------------------------------------------------
 #  Training
 # -----------------------------------------------------------------------------
-
 def _train(train_units, dependency):
     # compute and count all the unigrams and bigrams (two successive units)
     unigrams = collections.Counter(train_units)
